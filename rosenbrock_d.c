@@ -9,10 +9,10 @@
    Plus diff mem management of: f:in x:in
 */
 
-double rosenbrock(double x[], int n)
+long double rosenbrock(double x[], int n)
 {
   int i;
-  double f = 0.0;
+  long double f = 0.0;
 
   for (i = 0; i < n-1; ++i) {
       f = f + 100*(x[i]*x[i]-x[i+1])*(x[i]*x[i]-x[i+1]) + (x[i]-1)*(x[i]-1
@@ -22,9 +22,9 @@ double rosenbrock(double x[], int n)
   return f;
 }
 
-double rosenbrock_gradient(double x[], double xd[], int n) {
+long double rosenbrock_gradient(double x[], double xd[], int n) {
     int i;
-    double fd = 0.0;
+    long double fd = 0.0;
 
     for (i = 0; i < n-1; ++i) {
         fd = fd + 100*((xd[i]*x[i]+x[i]*xd[i]-xd[i+1])*(x[i]*x[i]-x[i+1])) +

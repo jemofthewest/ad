@@ -8,12 +8,10 @@ function cRosenbrock(x::Vector)
     return f
 end
 
-function cRosenbrockGradient(x::Vector)
+function cRosenbrockGradient(x::Vector, fd::Vector)
     n = length(x)
 
     xd = eye(n)
-
-    fd = Array(Cdouble, n, 1)
 
     for i = 1:n
         fd[i] = ccall( (:rosenbrock_gradient, "./librosenbrock.so"), Cdouble, (Ptr{Cdouble}, Ptr{Cdouble}, Cint), x, xd[:,i], n )
@@ -34,10 +32,10 @@ function rosenbrock(x::Vector)
 end
     
 
-function rosenbrockGradient(x::Vector)
+function rosenbrockGradient!(x::Vector, fd::Vector)
     n = length(x)
 
-    fd = Array(Float64, n, 1)
+    fd = Array(Float64, n)
     fd[1] = 2*(x[1] - 1) + 400*x[1]*(x[1]^2-x[2])
     for i=2:n-1
         fd[i] = 2*(x[i] - 1) + 400*x[i]*(x[i]^2 - x[i+1] - 200*(x[i-1]^2 - x[i]))
@@ -45,4 +43,13 @@ function rosenbrockGradient(x::Vector)
     fd[n] = -200*(x[n-1]^2 - x[n])
 
     return fd
+end
+
+function rosenbrockmin(x::Vector, grad::Vector)
+    A = eye(length(x),length(x))
+    if length(grad) > 0
+      grad = rosenbrockGradient(x)
+    end
+
+    f = rosenbrock(x)
 end
